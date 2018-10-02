@@ -40,7 +40,7 @@
 
 	.task-2 textarea {
 		width: 75%;
-		min-height: 8em;
+		min-height: 15em;
 		margin: 0.5em 12.5%;
 	}
 
@@ -63,6 +63,10 @@
 
 	.hidden {
 		display: none;
+	}
+
+	#html-preview {
+		text-align: left;
 	}
 
 </style>
@@ -90,12 +94,22 @@
 	<section class="task task-2">
 		<h2>Task 2</h2>
 			<h3>HTML Renderer</h3>
-			<p>Enter a javascript array where the first element is tag and subsequent elements are either text or nested arrays representing nested tags.</p>
-			<textarea id="html-array-input">['ul',['li','Peanuts'],['li','Walnuts',' ', ['em','large']]]</textarea>
+			<p>Enter a javascript array where the first element is a tag and subsequent elements are either text or nested arrays representing nested tags.</p>
+			<textarea id="html-array-input">
+['ul',
+	['li','Peanuts'],
+	['li','Walnuts',': ', ['em','large']],
+	['li',
+			['ol',
+				['li','strawberries'],
+				['li','strawberries']
+			]
+	]
+]
+			</textarea>
 			<button id="html-render">Show HTML</button>
-			<pre id="html-preview">
-
-			</pre>
+			<pre id="html-output"></pre>
+			<article id="html-preview"></article>
 			<p class="error hidden" id="html-render-error">Not valid array</p>
 		</section>	
 	</main>
@@ -131,6 +145,7 @@
 
 	let htmlInput = document.getElementById('html-array-input');
 	let htmlShow =	document.getElementById('html-render');
+	let htmlOutput =	document.getElementById('html-output');
 	let htmlPreview =	document.getElementById('html-preview');
 	let htmlRenderError = document.getElementById('html-render-error');
 
@@ -150,7 +165,7 @@
 			let arrayVal = []
 			let valid = false
 			try {
-				arrayVal = eval(strVal)
+				arrayVal = eval(strVal.trim())
 				valid = arrayVal instanceof Array
 			} catch(e) {
 				valid = false
@@ -160,7 +175,8 @@
 			if (valid) {
 				html = itemsToTag(arrayVal)
 			}
-			htmlPreview.textContent = renderHTML(html)
+			htmlOutput.textContent = renderHTML(html)
+			htmlPreview.innerHTML = html
 		}
 	}
 
