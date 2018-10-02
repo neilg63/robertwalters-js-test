@@ -50,6 +50,9 @@ function splitHex (strHex) {
 		let hexComponentMatch = '([0-9a-f][0-9a-f])'
 		let regex = new RegExp('#' + hexComponentMatch. repeat(3))
 		if (match = strHex.match(regex)) {
+			// if matched, convert match collection an Array
+			// via map(),filter by only 2 char components
+			// and map an array of base 10 integers
 			rgb = match.map(m => m)
 			  .filter(s => s.length < 3)
 			  .map(c => parseInt(c, 16));
@@ -69,7 +72,6 @@ function itemsToTag(items) {
 	if (items instanceof Array && items.length > 0) {
 		let tagName = items.shift()
 		str = '<' + tagName
-		let end = ' />'
 		if (items.length > 0) {
 			str += '>'
 			str += items.map(item => {

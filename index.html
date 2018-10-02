@@ -57,6 +57,14 @@
 		margin: 0 40px;
 	}
 
+	.error {
+		color: red;
+	}
+
+	.hidden {
+		display: none;
+	}
+
 </style>
 </head>
 <body>
@@ -67,7 +75,8 @@
 		<section class="task task-1">
 		<h2>Task 1</h2>
 			<h3>Colour Averager</h3>
-			
+			<p>Enter two colours to calculate the average colour.
+				if you don't see colour pickers, please enter their hexadecimal values as <em>#0066ff</em>.</p>
 			<div class="squares">
 				<input type="color" size="7" value="#ff0000" id="col1" class="square col-input" />
 				<div class="separator">+</div>
@@ -81,11 +90,13 @@
 	<section class="task task-2">
 		<h2>Task 2</h2>
 			<h3>HTML Renderer</h3>
+			<p>Enter a javascript array where the first element is tag and subsequent elements are either text or nested arrays representing nested tags.</p>
 			<textarea id="html-array-input">['ul',['li','Peanuts'],['li','Walnuts',' ', ['em','large']]]</textarea>
 			<button id="html-render">Show HTML</button>
 			<pre id="html-preview">
 
 			</pre>
+			<p class="error hidden" id="html-render-error">Not valid array</p>
 		</section>	
 	</main>
 <script>
@@ -121,6 +132,7 @@
 	let htmlInput = document.getElementById('html-array-input');
 	let htmlShow =	document.getElementById('html-render');
 	let htmlPreview =	document.getElementById('html-preview');
+	let htmlRenderError = document.getElementById('html-render-error');
 
 	let renderHTML = (strHTML) => {
 		let txtEl = document.createElement('textarea')
@@ -130,6 +142,10 @@
 
 	let parseHtmlArray = () => {
 		let strVal = htmlInput.value;
+		if (!htmlRenderError.classList.contains('hidden')) {
+			htmlRenderError.classList.add('hidden')	
+		}
+		
 		if (strVal.constructor == String && strVal.indexOf('[') >= 0 && strVal.indexOf(']') > 1) {
 			let arrayVal = []
 			let valid = false
@@ -137,14 +153,14 @@
 				arrayVal = eval(strVal)
 				valid = arrayVal instanceof Array
 			} catch(e) {
-				console.log(e)
 				valid = false
+				htmlRenderError.classList.remove('hidden')
 			}
-			
+			let html = '';
 			if (valid) {
-				let html = itemsToTag(arrayVal)
-				htmlPreview.textContent = renderHTML(html)
+				html = itemsToTag(arrayVal)
 			}
+			htmlPreview.textContent = renderHTML(html)
 		}
 	}
 
