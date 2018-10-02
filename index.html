@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Javascript Test</title>
+	<script src="./js/functions.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+	body {
+		margin: 0 auto;
+		text-align: center;
+	}
+	main {
+		width: 90%;
+		max-width: 1024px;
+		margin: 0 auto;
+		display: flex;
+		flex-flow: wrap column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.task {
+		width: 100%;
+		position: relative;
+		padding: 1em;
+		margin: 1em auto;
+		border: dotted 1px #ff9999;
+	}
+
+	.task-1 input.col-input {
+		font-size: 2em;
+		width: 4em;
+		height: 2em;
+		margin: 1em;
+	}
+
+	.task-1 pre {
+		font-size: 2.5em;
+		border: dashed 1px #cccccc;
+	}
+
+	.task-2 textarea {
+		width: 75%;
+		min-height: 8em;
+		margin: 0.5em 12.5%;
+	}
+
+	.squares {
+		display: flex;
+		flex-flow: nowrap row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.squares > div.square {
+		height: 120px;
+		width: 120px;
+		margin: 0 40px;
+	}
+
+</style>
+</head>
+<body>
+	<header>
+		<h1>Candidate: Neil Gardner</h1>
+	</header>
+	<main>
+		<section class="task task-1">
+		<h2>Task 1</h2>
+			<h3>Colour Averager</h3>
+			
+			<div class="squares">
+				<input type="color" size="7" value="#ff0000" id="col1" class="square col-input" />
+				<div class="separator">+</div>
+				<input type="color" size="7" value="#0000ff" id="col2" class="col-input" />	
+				<div class="separator">=</div>
+				<div id="col-result-preview" class="square"></div>
+			</div>
+			<pre id="average-result"></pre>	
+	</section>
+
+	<section class="task task-2">
+		<h2>Task 2</h2>
+			<h3>HTML Renderer</h3>
+			<textarea id="html-array-input">['ul',['li','Peanuts'],['li','Walnuts',' ', ['em','large']]]</textarea>
+			<button id="html-render">Show HTML</button>
+			<pre id="html-preview">
+
+			</pre>
+		</section>	
+	</main>
+<script>
+(function() {
+
+	let colourFields = document.querySelectorAll('.col-input'),
+	  colourResult = document.getElementById('average-result'),
+	  colResultSq = document.getElementById('col-result-preview');
+
+	  let updateColour = () => {
+	  	let v1, v2, v;
+			for (let i = 0; i < 2; i++) {
+				v = colourFields[i].value;
+				if (i < 1) {
+					v1 = v
+				} else {
+					v2 = v;
+				}
+				if (v1 && v2) {
+					let result = calcMeanColour(v1, v2)
+					colourResult.innerHTML = `${v1} + ${v2} = ${result}`;
+					colResultSq.style.backgroundColor = result
+				}
+			}
+	  }
+
+	colourFields.forEach(field => {
+		field.addEventListener('change',updateColour)
+	})
+
+	updateColour();
+
+	let htmlInput = document.getElementById('html-array-input');
+	let htmlShow =	document.getElementById('html-render');
+	let htmlPreview =	document.getElementById('html-preview');
+
+	let renderHTML = (strHTML) => {
+		let txtEl = document.createElement('textarea')
+		txtEl.innerHTML = strHTML
+		return txtEl.value
+	}
+
+	let parseHtmlArray = () => {
+		let strVal = htmlInput.value;
+		if (strVal.constructor == String && strVal.indexOf('[') >= 0 && strVal.indexOf(']') > 1) {
+			let arrayVal = []
+			let valid = false
+			try {
+				arrayVal = eval(strVal)
+				valid = arrayVal instanceof Array
+			} catch(e) {
+				console.log(e)
+				valid = false
+			}
+			
+			if (valid) {
+				let html = itemsToTag(arrayVal)
+				htmlPreview.textContent = renderHTML(html)
+			}
+		}
+	}
+
+	htmlShow.addEventListener('click', parseHtmlArray);
+	parseHtmlArray();
+
+})();
+</script>
+</body>
+</html>
