@@ -1,4 +1,4 @@
-#Simple Javascript Test
+# Simple Javascript Test
 
 The functions library in js/functions.js implements the requirements of the test using ES6, i.e. they use syntax only compatible with modern browsers such as Chrome 50++, Firefox 50+, Edge 12+, Opera latest etc.
 
