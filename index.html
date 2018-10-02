@@ -139,8 +139,10 @@
 	  }
 
 	colourFields.forEach(field => {
-		field.addEventListener('change',updateColour)
+		field.addEventListener('change', updateColour)
 	})
+
+	colResultSq.addEventListener('click', updateColour)
 
 	updateColour();
 
